@@ -14,7 +14,7 @@ const catagory = require("./categories/category");
 //view engine
 app.set('view engine', 'ejs');
 
-//body-parser
+//body-parser para pegar os dados do formulário
 app.use(bodyParser.urlencoded({extend: false}));
 app.use(bodyParser.json());
 
