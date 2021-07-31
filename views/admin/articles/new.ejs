@@ -11,9 +11,15 @@
 			<form method="POST" action="/articles/save">
 				<input type="text" name="title" placeholder="Defina o título do artigo" class="form-control" required="">
 				<br>
-				<textarea id="article" class="form-control" placeholder="Esqueva o artigo aqui" name="nody"></textarea>
+				<textarea id="article" class="form-control" placeholder="Esqueva o artigo aqui" name="body"></textarea>
 				<br>
 				<label>Categorias</label>
+				<select name="category" class="form-control">
+					<% categories.forEach((category) => { %>
+					<option value="<%= category.id %>"><%= category.title %></option>
+					<% }) %>
+				</select>
+				<hr>
 				<button class="btn btn-success">Cadastrar</button>
 			</form>
 		</div>	
