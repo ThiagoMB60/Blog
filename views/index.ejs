@@ -1,7 +1,30 @@
 <%- include ("partials/header.ejs") %>
 <%- include ("partials/homenavbar.ejs") %>
 <body>
-	<h1>OLÁ MUNDO!</h1>
+	<div class="container">
+		<hr>
+		<div class="jumbotron">
+		  <h1 class="display-4">Olá, seja bem-vindo.</h1>
+		  <p class="lead">Esta é um simples blog.</p>
+		  <hr class="my-4">
+		  <p>Este blog foi desenvolvido em Node.js com intuito de aprimorar os conhecimentos desta tecnologia. Aqui é possível visualizar, adicionar, editar e excluir artigos e categorias em conjunto com o banco de dados MySQL.</p>
+		  <p class="lead">
+		    <a class="btn btn-primary btn-lg" href="#" role="button">Saber mais</a>
+		  </p>
+		</div>	
+		<hr>
+		<% articles.forEach(articles => { %>
+			<div class="card">
+				<div class="card-header">
+					<h6><%= articles.title %></h6>
+				</div>
+				<div class="card-body">
+					<a class="btn btn-primary" href="/<%= articles.slug %>">Acessar artigo</a>
+				</div>
+			</div>
+			<br>
+		<% }) %>
+	</div>
 </body>
 
 <%- include ("partials/footer.ejs") %>

@@ -34,7 +34,32 @@ app.use("/", articlesController);
 
 //rota principal
 app.get("/", (req, res) => {
-	res.render("index");
+	article.findAll({
+		order: [
+			['id', 'DESC']
+		]
+	}).then(articles => {
+		res.render("index", {articles: articles});
+	});	
+});
+
+//rota de cada artigo
+app.get("/:slug", (req, res) => {
+	var slug = req.params.slug;
+
+	article.findOne({
+		where: {
+			slug: slug
+		}
+	}).then(article => {
+		if (article == undefined) {
+			res.redirect("/");
+		}else{
+			res.render("article", {article: article});
+		}		
+	}).catch(error => {
+		res.redirect("/");
+	});	
 });
 
 //start da aplicação
