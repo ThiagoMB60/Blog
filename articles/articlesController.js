@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const category = require("../categories/category");
-const article = require("./article");
-const slugify = require("slugify");
+const Category = require("../categories/category");
+const Article = require("./article");
+const Slugify = require("slugify");
 
 //listar artigos
 router.get("/admin/articles",(req, res) =>{
-	article.findAll({
-		include: [{model: category}]
+	Article.findAll({
+		include: [{model: Category}]
 	}).then((articles) => {
 		res.render("admin/articles/index", {articles: articles});
 	});	
@@ -20,7 +20,7 @@ router.post("/articles/delete", (req, res) =>{
 		if(isNaN(id)){
 			res.redirect("/admin/articles");
 		}else{
-			article.destroy({
+			Article.destroy({
 				where: {
 					id: id
 				}
@@ -35,7 +35,7 @@ router.post("/articles/delete", (req, res) =>{
 
 //criar novos artigos
 router.get("/admin/articles/new",(req, res) =>{
-	category.findAll().then(categories =>{
+	Category.findAll().then(categories =>{
 		res.render("admin/articles/new", {categories: categories});
 	});
 });
@@ -46,12 +46,29 @@ router.post("/articles/save", (req, res) => {
 	var body = req.body.body;
 	var category = req.body.category;
 
-	article.create({
+	Article.create({
 		title: title,
 		slug: slugify(title),
 		body: body,
 		categoryId: category
 	}).then(() => {
+		res.redirect("/admin/articles");
+	});
+});
+
+//editar artigos
+router.get("/admin/articles/edit/:id", (req, res) => {
+	var id = req.params.id;
+	Article.findByPk(id).then(article => {
+		if (article != undefined) {
+			Category.findAll().then(categories => {
+				res.render("admin/articles/edit", {categories: categories, article: article});
+			});
+		}else{
+			res.redirect("/admin/articles");
+		}
+	}).catch(erro => {
+		console.log("\n\n" + erro + "\n\n");
 		res.redirect("/admin/articles");
 	});
 });

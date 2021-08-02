@@ -4,12 +4,12 @@ const bodyParser = require("body-parser");
 const connection = require("./database/database");
 
 //importação de rotas
-const categoriesController = require("./categories/catagoriesController");
+const categoriesController = require("./categories/categoriesController");
 const articlesController = require("./articles/articlesController");
 
 //importação dos arquivos referente as tabelas e relacionamentos do banco de dados
-const article = require("./articles/article");
-const catagory = require("./categories/category");
+const Article = require("./articles/article");
+const Category = require("./categories/category");
 
 //view engine
 app.set('view engine', 'ejs');
@@ -34,12 +34,14 @@ app.use("/", articlesController);
 
 //rota principal
 app.get("/", (req, res) => {
-	article.findAll({
+	Article.findAll({
 		order: [
 			['id', 'DESC']
 		]
 	}).then(articles => {
-		res.render("index", {articles: articles});
+		Category.findAll().then(categories => {
+			res.render("index", {articles: articles, categories: categories});
+		});		
 	});	
 });
 
@@ -47,7 +49,7 @@ app.get("/", (req, res) => {
 app.get("/:slug", (req, res) => {
 	var slug = req.params.slug;
 
-	article.findOne({
+	Article.findOne({
 		where: {
 			slug: slug
 		}
@@ -55,11 +57,35 @@ app.get("/:slug", (req, res) => {
 		if (article == undefined) {
 			res.redirect("/");
 		}else{
-			res.render("article", {article: article});
+			Category.findAll().then(categories => {
+				res.render("article", {article: article, categories: categories});
+			});		
 		}		
 	}).catch(error => {
 		res.redirect("/");
 	});	
+});
+
+//rota de exibição dos artigos por categoria
+app.get("/category/:slug", (req, res) => {
+	var slug = req.params.slug;
+	Category.findOne({
+		where: {
+			slug: slug
+		},
+		include: [{model: Article}]
+	}).then(category => {
+		if(category != undefined) {
+			Category.findAll().then(categories => {
+				res.render("index", {articles: category.articles, categories: categories})
+			});
+		}else{
+			res.redirect("/");
+		}
+	}).catch(erro => {
+		console.log("\n"+"\n" + erro + "***************        Caiu no catch          ****************" + "\n"+"\n");
+		res.redirect("/");		
+	});
 });
 
 //start da aplicação

@@ -1,0 +1,48 @@
+<%- include ("../../partials/header.ejs") %>
+<%- include ("../../partials/navbar.ejs") %>
+
+<div class="container">
+	<hr>
+	<div class="card">
+		<div class="card-header">
+			<h2>Editar Artigo</h2>
+		</div>
+		<div class="card-body">
+			<form method="POST" action="/articles/save">
+				<input type="text" name="title" placeholder="Defina o título do artigo" class="form-control" required="">
+				<br>
+				<textarea id="article" class="form-control" placeholder="Esqueva o artigo aqui" name="body"></textarea>
+				<br>
+				<label>Categorias</label>
+				<select name="category" class="form-control">
+					<% categories.forEach((category) => { %>
+					<option value="<%= category.id %>"><%= category.title %></option>
+					<% }) %>
+				</select>
+				<hr>
+				<button class="btn btn-success">Atualizar</button>
+			</form>
+		</div>	
+	</div>
+</div>
+
+<div id="content" style="display: none;">
+	<%- article.body %>
+</div>
+
+<%- include ("../../partials/footer.ejs") %>
+
+<script src="/tinymce/tinymce.min.js"></script>
+<script>
+	tinymce.init({
+			language: 'pt_BR',
+			selector: "#article",
+			plugins: [
+				'advlist autolink link image lists print preview hr searchreplace wordcount fullscreen insertdatetime media save table paste emoticons'
+			],
+			init_instance_callback: () => {
+				//estou pegando a textarea de id 'article' e colocando dentro dela o conteudo da div 'content' usando jquery
+				tinymce.get("article").setContent($("#content").html())
+			}
+		})
+</script>

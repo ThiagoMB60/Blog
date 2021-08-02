@@ -1,25 +1,25 @@
-const sequelize = require("sequelize");
+const Sequelize = require("sequelize");
 const connection = require("../database/database");
 
 //importação de outro model para fazer o relacionamento
-const category = require("../categories/category");
+const Category = require("../categories/category");
 
-const article = connection.define('article', {
+const Article = connection.define('article', {
 	title:{
-		type: sequelize.STRING,
+		type: Sequelize.STRING,
 		allowNull: false
 	}, slug:{
-		type: sequelize.STRING,
+		type: Sequelize.STRING,
 		allowNull: false
 	}, body:{
-		type: sequelize.TEXT,
+		type: Sequelize.TEXT,
 		allowNull: false
 	}
 });
 
-category.hasMany(article); //Uma categoria pode ter muitos artigos
-article.belongsTo(category); //Um artigo pertence a uma categoria
+Category.hasMany(Article); //Uma categoria pode ter muitos artigos
+Article.belongsTo(Category); //Um artigo pertence a uma categoria
 
-article.sync({force: false});
+Article.sync({force: false});
 
-module.exports = article;
+module.exports = Article;
