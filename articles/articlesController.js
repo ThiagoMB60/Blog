@@ -48,7 +48,7 @@ router.post("/articles/save", (req, res) => {
 
 	Article.create({
 		title: title,
-		slug: slugify(title),
+		slug: Slugify(title),
 		body: body,
 		categoryId: category
 	}).then(() => {
@@ -70,6 +70,73 @@ router.get("/admin/articles/edit/:id", (req, res) => {
 	}).catch(erro => {
 		console.log("\n\n" + erro + "\n\n");
 		res.redirect("/admin/articles");
+	});
+});
+
+//rota de atualização de artigos
+router.post("/articles/update", (req, res) => {
+	var id = req.body.id;
+	var body = req.body.body;
+	var title = req.body.title;
+	var category = req.body.category;
+
+	Article.update({
+		categoryId: category,
+		title: title,
+		body: body,
+		slug: Slugify(title)
+	},{
+		where: {
+			id: id
+		}
+	}).then(() => {
+		console.log("*** Atualizado com sucesso ***");
+		res.redirect("/admin/articles");
+	}).catch(erro => {
+		console.log("*** ERRO *** '"+ erro +"' *** ERRO ***");
+		res.redirect("/");
+	});
+});
+
+//rota de paginação de artgos
+router.get("/articles/page/:numPage", (req, res) => {
+	var page = req.params.numPage;
+	var offset = 0;
+
+	if (isNaN(page)) {
+		offset = 0;
+	}else{
+		offset = (parseInt(page)-1) * 4;
+	}
+
+	Article.findAndCountAll({
+		limit: 4,
+		offset: offset
+	}).then(articles => {
+		var next;
+
+		if (offset + 4 >= articles.count) {
+			next = false;
+		} else {
+			next = true;
+		}
+
+		var result = {
+			next: next,
+			articles: articles
+		}
+
+		Category.findAll().then(categories =>{
+			res.render("admin/articles/page", {result: result, categories: categories});			
+		})
+		.catch(erro => {
+			console.log("*** ERRO *** '"+ erro +"' *** ERRO ***");
+		res.redirect("/");
+		});
+
+	}).catch(erro => {		
+		console.log("*** ERRO *** '"+ erro +"' *** ERRO ***");
+		res.redirect("/");
 	});
 });
 
