@@ -3,13 +3,15 @@ const app = express();
 const bodyParser = require("body-parser");
 const connection = require("./database/database");
 
-//importação de rotas
+//importação de rotas dos controllers
 const categoriesController = require("./categories/categoriesController");
 const articlesController = require("./articles/articlesController");
+const usersController = require("./users/usersController");
 
 //importação dos arquivos referente as tabelas e relacionamentos do banco de dados
 const Article = require("./articles/article");
 const Category = require("./categories/category");
+const User = require("./users/user");
 
 //view engine
 app.set('view engine', 'ejs');
@@ -31,6 +33,7 @@ connection.authenticate().then(() =>{
 //uso de rotas importadas
 app.use("/", categoriesController);
 app.use("/", articlesController);
+app.use("/", usersController);
 
 //rota principal
 app.get("/", (req, res) => {

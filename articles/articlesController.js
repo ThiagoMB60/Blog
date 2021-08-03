@@ -98,7 +98,7 @@ router.post("/articles/update", (req, res) => {
 	});
 });
 
-//rota de paginação de artgos
+//rota de paginação de artigos
 router.get("/articles/page/:numPage", (req, res) => {
 	var page = req.params.numPage;
 	var offset = 0;
