@@ -1,0 +1,9 @@
+<script>
+	function confirmationDelete(event, form){
+		event.preventDefault();
+		var decision = confirm("Deseja deletar?");
+		if (decision) {
+			form.submit();
+		}
+	}
+</script>

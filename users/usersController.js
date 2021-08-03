@@ -5,7 +5,16 @@ const bcrypt = require("bcryptjs");
 
 //rota de listagem de users
 router.get("/admin/users", (req, res) => {
-	res.render("admin/users/index");
+	User.findAll().then(users => {
+		if (users != undefined) {
+			res.render("admin/users/index", {users: users});
+		} else {
+			res.redirect("/");
+		}		
+	}).catch(erro => {
+				console.log("\n*** ERRO *** '"+ erro +"' *** ERRO ***\n");
+				res.redirect("/");
+	});		
 });
 
 //rota da view de criação de usuários
