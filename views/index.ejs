@@ -2,7 +2,9 @@
 <%- include ("partials/homenavbar.ejs") %>
 <body>
 	<div class="container">
+
 		<hr>
+
 		<div class="jumbotron">
 		  <h1 class="display-4">Olá, seja bem-vindo.</h1>
 		  <p class="lead">Esta é um simples blog.</p>
@@ -12,7 +14,9 @@
 		    <a class="btn btn-primary btn-lg" href="#" role="button">Saber mais</a>
 		  </p>
 		</div>	
+
 		<hr>
+
 		<% articles.forEach(articles => { %>
 			<div class="card">
 				<div class="card-header">
@@ -24,6 +28,17 @@
 			</div>
 			<br>
 		<% }) %>
+
+		<hr>
+
+		<div class="row">
+			<div class="col col-12">
+				<a style="float:right;" href="/articles/page/2">Próxima >>></a>
+			</div>
+		</div>
+
+		<hr>
+
 	</div>
 </body>
 
