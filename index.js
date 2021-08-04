@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const connection = require("./database/database");
+const session = require("express-session");
 
 //importação de rotas dos controllers
 const categoriesController = require("./categories/categoriesController");
@@ -19,6 +20,12 @@ app.set('view engine', 'ejs');
 //body-parser para pegar os dados do formulário
 app.use(bodyParser.urlencoded({extend: false}));
 app.use(bodyParser.json());
+
+//sessions
+app.use(session({
+	secret: "yagdaomczxvkdpasd", //texto aleatório para aumentar a segurança da identificação de sessao
+	cookie: {maxAge: 3000000000} //tempo que a sessão deve ficar ativa em milisegundos
+}));
 
 //Static
 app.use(express.static('public'));
